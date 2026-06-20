@@ -398,13 +398,14 @@ interface player {
         v-1-21-9,
         v-1-21-11,
         v-26-1,
+        v-26-2,
         unknown,
     }
 
     /// Represents a specific version of the Minecraft Bedrock Edition protocol.
     enum bedrock-minecraft-version {
         v-1-21,
-        v-1-26-20,
+        v-1-26-30,
         unknown,
     }
 

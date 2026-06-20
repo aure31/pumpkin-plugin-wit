@@ -79,6 +79,11 @@ interface java-packets {
     hand: option<s32>,
     sneaking: bool,
   }
+  record s-jigsaw-generate {
+    pos: tuple<s32, s32, s32>,
+    levels: s32,
+    keep-jigsaws: bool,
+  }
   record s-keep-alive {
     keep-alive-id: s64,
   }
@@ -181,6 +186,16 @@ interface java-packets {
   record s-set-held-item {
     slot: s32,
   }
+  record s-set-jigsaw-block {
+    pos: tuple<s32, s32, s32>,
+    name: string,
+    target: string,
+    pool: string,
+    final-state: string,
+    joint: string,
+    selection-priority: s32,
+    placement-priority: s32,
+  }
   record s-swing-arm {
     hand: s32,
   }
@@ -212,6 +227,9 @@ interface java-packets {
   }
   record c-action-bar {
     action-bar: string,
+  }
+  record c-award-stats {
+    stats: list<string>,
   }
   record c-set-block-destroy-stage {
     entity-id: s32,
@@ -381,15 +399,8 @@ interface java-packets {
     reduced-debug-info: bool,
     enabled-respawn-screen: bool,
     limited-crafting: bool,
-    dimension: string,
-    hashed-seed: s64,
-    game-mode: u8,
-    previous-gamemode: u8,
-    debug: bool,
-    is-flat: bool,
-    death-dimension-name: option<string>,
-    portal-cooldown: s32,
-    sealevel: s32,
+    spawn-data: string,
+    online-mode: bool,
     enforce-secure-chat: bool,
   }
   record c-map-item-data {
@@ -499,16 +510,7 @@ interface java-packets {
     objective-name: option<string>,
   }
   record c-respawn {
-    dimension-type: s32,
-    dimension-name: string,
-    hashed-seed: s64,
-    game-mode: u8,
-    previous-gamemode: u8,
-    debug: bool,
-    is-flat: bool,
-    death-dimension-name: option<string>,
-    portal-cooldown: s32,
-    sealevel: s32,
+    player-spawn-info: string,
     data-kept: u8,
   }
   record c-play-server-links {
@@ -729,6 +731,7 @@ interface java-packets {
     s-custom-click-action(s-custom-click-action),
     s-custom-payload(s-custom-payload),
     s-interact(s-interact),
+    s-jigsaw-generate(s-jigsaw-generate),
     s-keep-alive(s-keep-alive),
     s-move-vehicle(s-move-vehicle),
     s-paddle-boat(s-paddle-boat),
@@ -754,6 +757,7 @@ interface java-packets {
     s-set-command-block(s-set-command-block),
     s-set-creative-slot(s-set-creative-slot),
     s-set-held-item(s-set-held-item),
+    s-set-jigsaw-block(s-set-jigsaw-block),
     s-swing-arm(s-swing-arm),
     s-update-sign(s-update-sign),
     s-use-item(s-use-item),
@@ -763,6 +767,7 @@ interface java-packets {
   variant clientbound-packet {
     c-acknowledge-block-change(c-acknowledge-block-change),
     c-action-bar(c-action-bar),
+    c-award-stats(c-award-stats),
     c-set-block-destroy-stage(c-set-block-destroy-stage),
     c-block-entity-data(c-block-entity-data),
     c-block-event(c-block-event),

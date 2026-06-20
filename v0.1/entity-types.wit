@@ -134,6 +134,7 @@ interface entity-types {
     squid,
     stray,
     strider,
+    sulfur-cube,
     tadpole,
     text-display,
     tnt,

@@ -80,6 +80,7 @@ interface data-components {
     container,
     block-state,
     bees,
+    sulfur-cube-content,
     lock,
     container-loot,
     break-sound,

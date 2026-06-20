@@ -6,6 +6,13 @@ interface particles {
     block,
     block-marker,
     bubble,
+    sulfur-bubbles,
+    noxious-gas,
+    noxious-gas-cloud,
+    geyser,
+    geyser-base,
+    geyser-poof,
+    geyser-plume,
     cloud,
     copper-fire-flame,
     crit,
@@ -119,5 +126,6 @@ interface particles {
     trial-omen,
     block-crumble,
     firefly,
+    sulfur-cube-goo,
   }
 }

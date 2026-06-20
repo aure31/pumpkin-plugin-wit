@@ -55,6 +55,7 @@ interface biomes {
     sparse-jungle,
     stony-peaks,
     stony-shore,
+    sulfur-caves,
     sunflower-plains,
     swamp,
     taiga,

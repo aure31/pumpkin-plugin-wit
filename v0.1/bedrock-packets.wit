@@ -14,6 +14,11 @@ interface bedrock-packets {
     data: f32,
     swing-source: option<string>,
   }
+  record s-block-pick-request {
+    block-pos: tuple<s32, s32, s32>,
+    add-block-nbt: bool,
+    hotbar-slot: u8,
+  }
   record s-client-cache-status {
     cache-supported: bool,
   }
@@ -51,9 +56,13 @@ interface bedrock-packets {
   record s-inventory-transaction {
     legacy-request-id: s32,
     legacy-set-item-slots: list<string>,
+    has-value: bool,
     actions: list<string>,
     transaction-type: s32,
     transaction-data: string,
+  }
+  record s-item-stack-request {
+    requests: list<string>,
   }
   record s-loading-screen {
     status: s32,
@@ -63,6 +72,14 @@ interface bedrock-packets {
     protocol-version: s32,
     jwt: list<u8>,
     raw-token: list<u8>,
+  }
+  record s-mob-equipment {
+    entity-runtime-id: string,
+    stack-id: s32,
+    item: option<string>,
+    inventory-slot: u8,
+    hotbar-slot: u8,
+    window-id: u8,
   }
   record s-modal-form-response {
     form-id: s32,
@@ -165,6 +182,15 @@ interface bedrock-packets {
     synced-properties: string,
     links: list<string>,
   }
+  record c-add-item-actor {
+    entity-unique-id: string,
+    entity-runtime-id: string,
+    item: string,
+    position: tuple<f64, f64, f64>,
+    velocity: tuple<f64, f64, f64>,
+    metadata: string,
+    from-fishing: bool,
+  }
   record c-add-player {
     uuid: uuid,
     username: string,
@@ -214,7 +240,7 @@ interface bedrock-packets {
     on-ground: bool,
     tick: string,
   }
-  record creative-content {
+  record c-creative-content {
     groups: list<string>,
     entries: list<string>,
   }
@@ -231,11 +257,16 @@ interface bedrock-packets {
     jwt-data: string,
   }
   record c-inventory-content {
-    inventory-id: s32,
+    container-id: s32,
     slots: list<string>,
-    container-name: u8,
-    dynamic-id: option<s32>,
+    full-container-name: string,
     storage-item: string,
+  }
+  record c-item-registry {
+    items: list<string>,
+  }
+  record c-item-stack-response {
+    responses: list<string>,
   }
   record c-level-chunk {
     dimension: s32,
@@ -429,8 +460,13 @@ interface bedrock-packets {
     enable-clientside-generation: bool,
     blocknetwork-ids-are-hashed: bool,
     server-auth-sounds: bool,
+    is-logging-chat: bool,
     server-join-information: option<string>,
     telemetry: string,
+  }
+  record c-take-item-actor {
+    item-runtime-id: string,
+    actor-runtime-id: string,
   }
   record c-transfer {
     address: string,
@@ -457,6 +493,7 @@ interface bedrock-packets {
   variant serverbound-packet {
     s-actor-event(s-actor-event),
     s-animate(s-animate),
+    s-block-pick-request(s-block-pick-request),
     s-client-cache-status(s-client-cache-status),
     s-command-request(s-command-request),
     s-container-close(s-container-close),
@@ -464,8 +501,10 @@ interface bedrock-packets {
     s-emote-list(s-emote-list),
     s-interaction(s-interaction),
     s-inventory-transaction(s-inventory-transaction),
+    s-item-stack-request(s-item-stack-request),
     s-loading-screen(s-loading-screen),
     s-login(s-login),
+    s-mob-equipment(s-mob-equipment),
     s-modal-form-response(s-modal-form-response),
     s-player-action(s-player-action),
     s-player-auth-input(s-player-auth-input),
@@ -485,17 +524,20 @@ interface bedrock-packets {
   }
   variant clientbound-packet {
     c-add-actor(c-add-actor),
+    c-add-item-actor(c-add-item-actor),
     c-add-player(c-add-player),
     c-available-commands(c-available-commands),
     c-boss-event(c-boss-event),
     c-chunk-radius-update(c-chunk-radius-update),
     c-container-open(c-container-open),
     c-correct-player-move(c-correct-player-move),
-    creative-content(creative-content),
+    c-creative-content(c-creative-content),
     c-disconnect-player(c-disconnect-player),
     c-gamerules-changed(c-gamerules-changed),
     c-handshake(c-handshake),
     c-inventory-content(c-inventory-content),
+    c-item-registry(c-item-registry),
+    c-item-stack-response(c-item-stack-response),
     c-level-chunk(c-level-chunk),
     c-level-event(c-level-event),
     c-modal-form-request(c-modal-form-request),
@@ -525,6 +567,7 @@ interface bedrock-packets {
     c-set-time(c-set-time),
     c-set-title(c-set-title),
     c-start-game(c-start-game),
+    c-take-item-actor(c-take-item-actor),
     c-transfer(c-transfer),
     c-update-abilities(c-update-abilities),
     c-update-attributes(c-update-attributes),
