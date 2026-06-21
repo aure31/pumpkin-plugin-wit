@@ -160,6 +160,7 @@ interface command {
         damage-type(string),
         effect(string),
         enchantment(string),
+        advancement(string),
         entity-anchor(entity-anchor),
     }
 
