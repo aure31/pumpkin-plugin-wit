@@ -5,6 +5,10 @@ interface java-packets {
   record s-attack {
     entity-id: s32,
   }
+  record s-bundle-item-selected {
+    slot-id: s32,
+    selected-item-index: s32,
+  }
   record s-change-game-mode {
     game-mode: string,
   }
@@ -166,6 +170,10 @@ interface java-packets {
   record s-rename-item {
     item-name: string,
   }
+  variant s-seen-advancement {
+    open-tab(string),
+    close-tab,
+  }
   record s-select-trade {
     selected-slot: s32,
   }
@@ -196,8 +204,21 @@ interface java-packets {
     selection-priority: s32,
     placement-priority: s32,
   }
+  record s-set-test-block {
+    position: tuple<s32, s32, s32>,
+    mode: string,
+    message: string,
+  }
   record s-swing-arm {
     hand: s32,
+  }
+  record s-teleport-to-entity {
+    target: uuid,
+  }
+  record s-test-instance-block-action {
+    pos: tuple<s32, s32, s32>,
+    action: string,
+    data: string,
   }
   record s-update-sign {
     location: tuple<s32, s32, s32>,
@@ -513,6 +534,9 @@ interface java-packets {
     player-spawn-info: string,
     data-kept: u8,
   }
+  record c-select-advancements-tab {
+    tab-id: option<string>,
+  }
   record c-play-server-links {
     links: list<string>,
   }
@@ -664,6 +688,13 @@ interface java-packets {
     z: s32,
     x: s32,
   }
+  record c-update-advancements {
+    reset: bool,
+    added: list<string>,
+    removed: list<string>,
+    progress: list<string>,
+    show-advancements: bool,
+  }
   record c-update-attributes {
     entity-id: s32,
     properties: list<string>,
@@ -715,6 +746,7 @@ interface java-packets {
   }
   variant serverbound-packet {
     s-attack(s-attack),
+    s-bundle-item-selected(s-bundle-item-selected),
     s-change-game-mode(s-change-game-mode),
     s-chat-command(s-chat-command),
     s-chat-message(s-chat-message),
@@ -752,13 +784,17 @@ interface java-packets {
     s-recipe-book-change-settings(s-recipe-book-change-settings),
     s-recipe-book-seen-recipe(s-recipe-book-seen-recipe),
     s-rename-item(s-rename-item),
+    s-seen-advancement(s-seen-advancement),
     s-select-trade(s-select-trade),
     s-set-beacon(s-set-beacon),
     s-set-command-block(s-set-command-block),
     s-set-creative-slot(s-set-creative-slot),
     s-set-held-item(s-set-held-item),
     s-set-jigsaw-block(s-set-jigsaw-block),
+    s-set-test-block(s-set-test-block),
     s-swing-arm(s-swing-arm),
+    s-teleport-to-entity(s-teleport-to-entity),
+    s-test-instance-block-action(s-test-instance-block-action),
     s-update-sign(s-update-sign),
     s-use-item(s-use-item),
     s-use-item-on(s-use-item-on),
@@ -825,6 +861,7 @@ interface java-packets {
     c-remove-mob-effect(c-remove-mob-effect),
     c-reset-score(c-reset-score),
     c-respawn(c-respawn),
+    c-select-advancements-tab(c-select-advancements-tab),
     c-play-server-links(c-play-server-links),
     c-set-border-center(c-set-border-center),
     c-set-border-lerp-size(c-set-border-lerp-size),
@@ -858,6 +895,7 @@ interface java-packets {
     c-ticking-step(c-ticking-step),
     c-transfer(c-transfer),
     c-unload-chunk(c-unload-chunk),
+    c-update-advancements(c-update-advancements),
     c-update-attributes(c-update-attributes),
     c-update-entity-pos(c-update-entity-pos),
     c-update-entity-pos-rot(c-update-entity-pos-rot),
