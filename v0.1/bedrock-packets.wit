@@ -157,6 +157,13 @@ interface bedrock-packets {
   record s-set-local-player-as-initialized {
     runtime-entity-id: string,
   }
+  record s-set-player-inventory-options {
+    left-inventory-tab: u8,
+    right-inventory-tab: u8,
+    filtering: bool,
+    inventory-layout: u8,
+    crafting-layout: u8,
+  }
   record s-text {
     needs-translation: bool,
     r-type: string,
@@ -261,6 +268,13 @@ interface bedrock-packets {
     slots: list<string>,
     full-container-name: string,
     storage-item: string,
+  }
+  record c-inventory-slot {
+    window-id: s32,
+    inventory-slot: s32,
+    container-name: option<string>,
+    storage: option<string>,
+    item: string,
   }
   record c-item-registry {
     items: list<string>,
@@ -531,6 +545,7 @@ interface bedrock-packets {
     s-request-network-settings(s-request-network-settings),
     s-resource-pack-response(s-resource-pack-response),
     s-set-local-player-as-initialized(s-set-local-player-as-initialized),
+    s-set-player-inventory-options(s-set-player-inventory-options),
     s-text(s-text),
     unknown,
   }
@@ -548,6 +563,7 @@ interface bedrock-packets {
     c-gamerules-changed(c-gamerules-changed),
     c-handshake(c-handshake),
     c-inventory-content(c-inventory-content),
+    c-inventory-slot(c-inventory-slot),
     c-item-registry(c-item-registry),
     c-item-stack-response(c-item-stack-response),
     c-level-chunk(c-level-chunk),
