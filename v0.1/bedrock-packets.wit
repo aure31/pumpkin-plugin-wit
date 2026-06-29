@@ -3,14 +3,14 @@ package pumpkin:plugin@0.1.0;
 interface bedrock-packets {
   use uuid.{ uuid };
   record s-actor-event {
-    entity-runtime-id: s32,
+    entity-runtime-id: s64,
     event-type: string,
     event-data: s32,
     fire-at-position: option<tuple<f64, f64, f64>>,
   }
   record s-animate {
     action: string,
-    runtime-entity-id: string,
+    runtime-entity-id: s64,
     data: f32,
     swing-source: option<string>,
   }
@@ -37,7 +37,7 @@ interface bedrock-packets {
     server-initiated: bool,
   }
   record s-emote {
-    runtime-entity-id: string,
+    runtime-entity-id: s64,
     emote-id: string,
     emote-length: s32,
     xuid: string,
@@ -45,12 +45,12 @@ interface bedrock-packets {
     %flags: u8,
   }
   record s-emote-list {
-    runtime-entity-id: string,
+    runtime-entity-id: s64,
     emote-pieces: list<uuid>,
   }
   record s-interaction {
     action: string,
-    target-runtime-id: string,
+    target-runtime-id: s64,
     position: option<tuple<f64, f64, f64>>,
   }
   record s-inventory-transaction {
@@ -74,7 +74,7 @@ interface bedrock-packets {
     raw-token: list<u8>,
   }
   record s-mob-equipment {
-    entity-runtime-id: string,
+    entity-runtime-id: s64,
     stack-id: s32,
     item: option<string>,
     inventory-slot: u8,
@@ -104,11 +104,11 @@ interface bedrock-packets {
     interaction-model: s32,
     interact-pitch: f32,
     interact-yaw: f32,
-    tick: string,
+    tick: s64,
     delta: tuple<f64, f64, f64>,
     block-actions: option<list<string>>,
     vehicle-rotation: option<string>,
-    vehicle-unique-id: option<string>,
+    vehicle-unique-id: option<s64>,
     analog-move: string,
     camera-orientation: tuple<f64, f64, f64>,
     raw-move: string,
@@ -143,6 +143,10 @@ interface bedrock-packets {
     magic: string,
     client-guid: s64,
   }
+  record s-request-ability {
+    ability: s32,
+    value: string,
+  }
   record s-request-chunk-radius {
     chunk-radius: s32,
     max-radius: u8,
@@ -155,7 +159,14 @@ interface bedrock-packets {
     download-size: s32,
   }
   record s-set-local-player-as-initialized {
-    runtime-entity-id: string,
+    runtime-entity-id: s64,
+  }
+  record s-set-player-inventory-options {
+    left-inventory-tab: u8,
+    right-inventory-tab: u8,
+    filtering: bool,
+    inventory-layout: u8,
+    crafting-layout: u8,
   }
   record s-set-player-inventory-options {
     left-inventory-tab: u8,
@@ -175,8 +186,8 @@ interface bedrock-packets {
     filtered-message: option<string>,
   }
   record c-add-actor {
-    entity-unique-id: string,
-    entity-runtime-id: string,
+    entity-unique-id: s64,
+    entity-runtime-id: s64,
     entity-type: string,
     position: tuple<f64, f64, f64>,
     velocity: tuple<f64, f64, f64>,
@@ -190,8 +201,8 @@ interface bedrock-packets {
     links: list<string>,
   }
   record c-add-item-actor {
-    entity-unique-id: string,
-    entity-runtime-id: string,
+    entity-unique-id: s64,
+    entity-runtime-id: s64,
     item: string,
     position: tuple<f64, f64, f64>,
     velocity: tuple<f64, f64, f64>,
@@ -201,7 +212,7 @@ interface bedrock-packets {
   record c-add-player {
     uuid: uuid,
     username: string,
-    entity-runtime-id: string,
+    entity-runtime-id: s64,
     platform-chat-id: string,
     position: tuple<f64, f64, f64>,
     velocity: tuple<f64, f64, f64>,
@@ -228,7 +239,7 @@ interface bedrock-packets {
     constraints: list<string>,
   }
   record c-boss-event {
-    boss-entity-id: string,
+    boss-entity-id: s64,
     action: string,
   }
   record c-chunk-radius-update {
@@ -238,14 +249,18 @@ interface bedrock-packets {
     container-id: u8,
     container-type: u8,
     position: tuple<s32, s32, s32>,
-    target-entity-id: string,
+    target-entity-id: s64,
   }
   record c-correct-player-move {
     prediction-type: u8,
     pos: tuple<f64, f64, f64>,
     pos-delta: tuple<f64, f64, f64>,
     on-ground: bool,
-    tick: string,
+    tick: s64,
+  }
+  record c-crafting-data {
+    recipes: list<string>,
+    clean-recipes: bool,
   }
   record c-creative-content {
     groups: list<string>,
@@ -297,7 +312,7 @@ interface bedrock-packets {
     form-data: string,
   }
   record c-move-actor-absolute {
-    entity-runtime-id: string,
+    entity-runtime-id: s64,
     %flags: u8,
     position: tuple<f64, f64, f64>,
     pitch: u8,
@@ -305,7 +320,7 @@ interface bedrock-packets {
     head-yaw: u8,
   }
   record c-move-actor-delta {
-    entity-runtime-id: string,
+    entity-runtime-id: s64,
     %flags: s32,
     x: f32,
     y: f32,
@@ -315,17 +330,17 @@ interface bedrock-packets {
     head-yaw: u8,
   }
   record c-move-player {
-    player-runtime-id: string,
+    player-runtime-id: s64,
     position: tuple<f64, f64, f64>,
     pitch: f32,
     yaw: f32,
     head-yaw: f32,
     mode: u8,
     on-ground: bool,
-    riding-runtime-id: string,
+    riding-runtime-id: s64,
     teleport-cause: s32,
     teleport-source-entity-type: s32,
-    tick: string,
+    tick: s64,
   }
   record c-network-chunk-publisher-update {
     pos-for-view: tuple<s32, s32, s32>,
@@ -396,7 +411,7 @@ interface bedrock-packets {
     server-id: string,
   }
   record c-remove-actor {
-    entity-unique-id: string,
+    entity-unique-id: s64,
   }
   record c-resource-pack-stack-packet {
     resource-pack-required: bool,
@@ -429,15 +444,15 @@ interface bedrock-packets {
     objective-name: string,
   }
   record c-set-actor-data {
-    actor-runtime-id: string,
+    actor-runtime-id: s64,
     metadata: string,
     synced-properties: string,
-    tick: string,
+    tick: s64,
   }
   record c-set-actor-motion {
-    target-runtime-id: string,
+    target-runtime-id: s64,
     motion: tuple<f64, f64, f64>,
-    tick: string,
+    tick: s64,
   }
   record c-set-health {
     health: s32,
@@ -459,8 +474,8 @@ interface bedrock-packets {
     filtered-message: string,
   }
   record c-start-game {
-    entity-id: string,
-    runtime-entity-id: string,
+    entity-id: s64,
+    runtime-entity-id: s64,
     player-gamemode: string,
     position: tuple<f64, f64, f64>,
     pitch: f32,
@@ -491,8 +506,8 @@ interface bedrock-packets {
     telemetry: string,
   }
   record c-take-item-actor {
-    item-runtime-id: string,
-    actor-runtime-id: string,
+    item-runtime-id: s64,
+    actor-runtime-id: s64,
   }
   record c-transfer {
     address: string,
@@ -506,9 +521,9 @@ interface bedrock-packets {
     layers: list<string>,
   }
   record c-update-attributes {
-    runtime-id: string,
+    runtime-id: s64,
     attributes: list<string>,
-    player-tick: string,
+    player-tick: s64,
   }
   record c-update-block {
     position: tuple<s32, s32, s32>,
@@ -541,6 +556,7 @@ interface bedrock-packets {
     s-open-connection-request1(s-open-connection-request1),
     s-open-connection-request2(s-open-connection-request2),
     s-unconnected-ping(s-unconnected-ping),
+    s-request-ability(s-request-ability),
     s-request-chunk-radius(s-request-chunk-radius),
     s-request-network-settings(s-request-network-settings),
     s-resource-pack-response(s-resource-pack-response),
@@ -558,6 +574,7 @@ interface bedrock-packets {
     c-chunk-radius-update(c-chunk-radius-update),
     c-container-open(c-container-open),
     c-correct-player-move(c-correct-player-move),
+    c-crafting-data(c-crafting-data),
     c-creative-content(c-creative-content),
     c-disconnect-player(c-disconnect-player),
     c-gamerules-changed(c-gamerules-changed),
